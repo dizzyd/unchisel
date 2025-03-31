@@ -1,0 +1,9 @@
+{
+  "ingredientPattern": "I",
+  "ingredients": {
+    "I": { "type": "item", "code":  "game:chisel-copper", "isTool": true, "toolDurabilityCost": 500}
+  },
+  "width": 1,
+  "height": 1,
+  "output": { "type": "item", "code": "unchisel", "quantity": 1 }
+}
