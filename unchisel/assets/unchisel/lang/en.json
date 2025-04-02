@@ -1,3 +1,9 @@
 {
-    "item-unchisel": "Unchisel"
+    "item-unchisel-copper": "Copper Unchisel",
+    "item-unchisel-tinbronze": "Tin Bronze Unchisel",
+    "item-unchisel-bismuthbronze": "Bismuth Bronze Unchisel",
+    "item-unchisel-blackbronze": "Black Bronze Unchisel",
+    "item-unchisel-iron": "Iron Unchisel",
+    "item-unchisel-meteoriciron": "Meteoric Iron Unchisel",
+    "item-unchisel-steel": "Steel Unchisel",
 }

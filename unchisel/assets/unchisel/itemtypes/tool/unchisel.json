@@ -25,11 +25,13 @@
       }
     }
   ],
+  "variantgroups": [{ "code": "material", "states": ["copper", "tinbronze", "bismuthbronze", "blackbronze", "iron", "meteoriciron", "steel" ] }],
   "shape": { "base": "game:item/tool/chisel" },
   "tool": "chisel",
   "enabled": true,
-  "heldTpHitAnimation": "hammerandchisel",
-  "heldTpUseAnimation": "hammerandchisel",
+  "heldRightReadyAnimation": "chiselready",
+  "heldTpHitAnimation": "chiselhit",
+  "heldTpUseAnimation": "chiselhit",
   "creativeinventory": { "general": ["*"], "items": ["*"], "tools": ["*"] },
   "textures": {
     "metal": { "base": "game:block/metal/corroded/rusty2" }
@@ -58,5 +60,13 @@
     "origin": { "x": 0.5, "y": 0, "z": 0.5 },
     "scale": 0.76
   },
-  "durability": 100
+  "durabilitybytype": {
+    "unchisel-copper": 120,
+    "unchisel-tinbronze": 200,
+    "unchisel-bismuthbronze": 240,
+    "unchisel-blackbronze": 280,
+    "unchisel-iron": 400,
+    "unchisel-meteoriciron": 560,
+    "unchisel-steel": 1200
+  }
 }
