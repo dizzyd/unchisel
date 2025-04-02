@@ -7,7 +7,7 @@ CONFIGURATION=$3
 cd ${VINTAGE_STORY}
 ./Vintagestory \
    --playStyle "creativebuilding" \
-   --openWorld "test world" \
+   --openWorld "unchiselcreative" \
    --addModPath ${PROJECT_DIR}/bin/${CONFIGURATION}/Mods \
    --dataPath $VS_DEV_DATA \
    --addOrigin ${PROJECT_DIR}/assets \
