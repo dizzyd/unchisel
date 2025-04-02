@@ -29,14 +29,22 @@ internal class ItemUnchisel : Item
             return;
         }
         
-        // Targeted block must be a microblock
+        // Target block must be breakable by the player
+        IPlayer byPlayer = (byEntity as EntityPlayer)?.Player;
+        if (!byEntity.World.Claims.TryAccess(byPlayer, blockSel.Position, EnumBlockAccessFlags.BuildOrBreak))
+        {
+            (api as ICoreClientAPI)?.TriggerIngameError(this, "notallowed", "Block is claimed by another player");
+            handling = EnumHandHandling.PreventDefault;
+            return;
+        }
+
+        // Targeted block must be chiselable (according to ItemChisel definition which covers a lot of cases)
         // N.B. make sure to use world BlockAccessor, not blockSel.Block as that may not be populated
         //      on the server side instance of this call
         Block microBlock = blockSel.Block ?? byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
-        if (microBlock is not BlockMicroBlock) 
+        if (!ItemChisel.IsChiselingAllowedFor(api, blockSel.Position, microBlock, byPlayer)) 
         {
-            api.Logger.Error("OnHeldInteractStart not a microblock side:{0} - pos:{1}", api.World.Side, blockSel.Position);
-            (api as ICoreClientAPI)?.TriggerIngameError(this, "nomicroblock", "Block must be already chiseled");
+            (api as ICoreClientAPI)?.TriggerIngameError(this, "notchiselable", "Block can not be chiseled");
             handling = EnumHandHandling.PreventDefault;
             return;
         }
