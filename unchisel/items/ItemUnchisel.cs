@@ -18,8 +18,11 @@ internal class ItemUnchisel : Item
             (api as ICoreClientAPI)?.TriggerIngameError(this, "uhh", "Handled, I guess");
             return;
         }
+
+        // It's possible that the block selection is null; not sure why this happens, but the original Chisel
+        // code also does this check, so I assume it's legit.
+        if (blockSel?.Position == null) return;
         
-                
         // Must be holding a hammer
         ItemSlot leftSlot = byEntity.LeftHandItemSlot; 
         if (leftSlot?.Itemstack?.Collectible?.Tool is not EnumTool.Hammer)
@@ -53,7 +56,6 @@ internal class ItemUnchisel : Item
         ItemStack microBlockStack = microBlock.OnPickBlock(byEntity.World, blockSel.Position);
         if (microBlockStack.Attributes["materials"] is not IntArrayAttribute materials)
         {
-            api.Logger.Error("OnHeldInteractStart no materials array side:{0} - pos:{1}", api.World.Side, blockSel.Position);
             (api as ICoreClientAPI)?.TriggerIngameError(this, "nomicroblock", "Block must be already chiseled");
             handling = EnumHandHandling.PreventDefault;
             return;
@@ -65,7 +67,6 @@ internal class ItemUnchisel : Item
             foreach (int materialId in materials.value)
             {
                 Block material = api.World.GetBlock(materialId);
-                api.Logger.Error("OnHeldInteract spawn material: {0}", material);
                 byEntity.World.SpawnItemEntity(new ItemStack(material, 1), blockSel.Position);
             }
 
