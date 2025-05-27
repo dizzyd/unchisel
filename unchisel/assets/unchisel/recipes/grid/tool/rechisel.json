@@ -1,0 +1,11 @@
+{
+  "ingredientPattern": "I",
+  "ingredients": {
+    "I": { "type": "item", "code":  "unchisel-*", "name": "metal",
+      "allowedVariants": ["copper", "tinbronze", "bismuthbronze", "blackbronze", "iron", "meteoriciron", "steel"] }
+  },
+  "width": 1,
+  "height": 1,
+  "name": "Unchisel to Chisel",
+  "output": { "type": "item", "code": "game:chisel-{metal}" }
+}
