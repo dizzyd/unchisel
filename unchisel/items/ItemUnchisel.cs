@@ -61,6 +61,15 @@ internal class ItemUnchisel : Item
             return;
         }
         
+        // If the target block is reinforced, show an error to user and make them use the plumb/square to remove it
+        ModSystemBlockReinforcement modBre = byEntity.World.Api.ModLoader.GetModSystem<ModSystemBlockReinforcement>();
+        if (modBre != null && modBre.IsReinforced(blockSel.Position))
+        {
+            (api as ICoreClientAPI)?.TriggerIngameError(this, "noreinforced", "Block is reinforced");
+            handling = EnumHandHandling.PreventDefault;
+            return;
+        }
+
         if (byEntity.World.Side == EnumAppSide.Server)
         {
             // Spawn items that were in the original block
