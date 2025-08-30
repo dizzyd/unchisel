@@ -6,8 +6,8 @@
         "DizzyD"
     ],
     "description": "Convert any chiseled block back into original block types",
-    "version": "1.0.4",
+    "version": "1.1.0",
     "dependencies": {
-        "game": "1.20.11"
+        "game": "1.21.0"
     }
 }
