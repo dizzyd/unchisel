@@ -41,6 +41,15 @@ internal class ItemUnchisel : Item
             return;
         }
 
+        // If the target block is reinforced, show an error to user and make them use the plumb/square to remove it
+        ModSystemBlockReinforcement modBre = byEntity.World.Api.ModLoader.GetModSystem<ModSystemBlockReinforcement>();
+        if (modBre != null && modBre.IsReinforced(blockSel.Position))
+        {
+            (api as ICoreClientAPI)?.TriggerIngameError(this, "noreinforced", "Block is reinforced");
+            handling = EnumHandHandling.PreventDefault;
+            return;
+        }
+
         // Targeted block must be chiselable (according to ItemChisel definition which covers a lot of cases)
         // N.B. make sure to use world BlockAccessor, not blockSel.Block as that may not be populated
         //      on the server side instance of this call
@@ -54,7 +63,7 @@ internal class ItemUnchisel : Item
         
         // Target block must also have a materials list
         ItemStack microBlockStack = microBlock.OnPickBlock(byEntity.World, blockSel.Position);
-        if (microBlockStack.Attributes["materials"] is not IntArrayAttribute materials)
+        if (microBlockStack?.Attributes["materials"] is not IntArrayAttribute materials)
         {
             (api as ICoreClientAPI)?.TriggerIngameError(this, "nomicroblock", "Block must be already chiseled");
             handling = EnumHandHandling.PreventDefault;
