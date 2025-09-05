@@ -19,10 +19,6 @@ internal class ItemUnchisel : Item
             return;
         }
 
-        // It's possible that the block selection is null; not sure why this happens, but the original Chisel
-        // code also does this check, so I assume it's legit.
-        if (blockSel?.Position == null) return;
-        
         // Must be holding a hammer
         ItemSlot leftSlot = byEntity.LeftHandItemSlot; 
         if (leftSlot?.Itemstack?.Collectible?.Tool is not EnumTool.Hammer)
@@ -50,23 +46,11 @@ internal class ItemUnchisel : Item
             return;
         }
 
-        // Targeted block must be chiselable (according to ItemChisel definition which covers a lot of cases)
-        // N.B. make sure to use world BlockAccessor, not blockSel.Block as that may not be populated
-        //      on the server side instance of this call
+        // Targeted block must be a microblock
         Block microBlock = byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
-        if (!ItemChisel.IsChiselingAllowedFor(api, blockSel.Position, microBlock, byPlayer)) 
+        if (microBlock is not BlockMicroBlock)
         {
-            (api as ICoreClientAPI)?.TriggerIngameError(this, "notchiselable", "Block can not be chiseled");
-            handling = EnumHandHandling.PreventDefault;
-            return;
-        }
-
-        // Target block must also have a materials list
-        ItemStack microBlockStack = microBlock.OnPickBlock(byEntity.World, blockSel.Position);
-        IntArrayAttribute materials = microBlockStack?.Attributes["materials"] as IntArrayAttribute;
-        if (microBlockStack != null && materials == null)
-        {
-            (api as ICoreClientAPI)?.TriggerIngameError(this, "nomicroblock", "Block must be already chiseled");
+            (api as ICoreClientAPI)?.TriggerIngameError(this, "nomicroblock", "Block must already be chiseled");
             handling = EnumHandHandling.PreventDefault;
             return;
         }
@@ -74,6 +58,8 @@ internal class ItemUnchisel : Item
         if (byEntity.World.Side == EnumAppSide.Server)
         {
             // Spawn items that were in the original block
+            ItemStack microBlockStack = microBlock.OnPickBlock(byEntity.World, blockSel.Position);
+            IntArrayAttribute materials = microBlockStack.Attributes["materials"] as IntArrayAttribute;
             foreach (int materialId in materials.value)
             {
                 Block material = api.World.GetBlock(materialId);
