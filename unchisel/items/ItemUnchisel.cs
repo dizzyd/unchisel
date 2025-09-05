@@ -53,23 +53,24 @@ internal class ItemUnchisel : Item
         // Targeted block must be chiselable (according to ItemChisel definition which covers a lot of cases)
         // N.B. make sure to use world BlockAccessor, not blockSel.Block as that may not be populated
         //      on the server side instance of this call
-        Block microBlock = blockSel.Block ?? byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
+        Block microBlock = byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
         if (!ItemChisel.IsChiselingAllowedFor(api, blockSel.Position, microBlock, byPlayer)) 
         {
             (api as ICoreClientAPI)?.TriggerIngameError(this, "notchiselable", "Block can not be chiseled");
             handling = EnumHandHandling.PreventDefault;
             return;
         }
-        
+
         // Target block must also have a materials list
         ItemStack microBlockStack = microBlock.OnPickBlock(byEntity.World, blockSel.Position);
-        if (microBlockStack?.Attributes["materials"] is not IntArrayAttribute materials)
+        IntArrayAttribute materials = microBlockStack?.Attributes["materials"] as IntArrayAttribute;
+        if (microBlockStack != null && materials == null)
         {
             (api as ICoreClientAPI)?.TriggerIngameError(this, "nomicroblock", "Block must be already chiseled");
             handling = EnumHandHandling.PreventDefault;
             return;
         }
-        
+
         if (byEntity.World.Side == EnumAppSide.Server)
         {
             // Spawn items that were in the original block
