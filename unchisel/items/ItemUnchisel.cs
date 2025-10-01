@@ -74,6 +74,16 @@ internal class ItemUnchisel : Item
                 slot.Itemstack.Collectible.DamageItem(byEntity.World, byEntity, player.Player.InventoryManager.ActiveHotbarSlot, totalDamage);
             }
             
+            // Break any beams attached to this position; make sure to drop them for the user
+            var be = api.World.BlockAccessor.GetBlockEntity(blockSel.Position)?.GetBehavior<BEBehaviorSupportBeam>();
+            if (be != null && be.Beams != null)
+            {
+                for(int i = 0; i < be.Beams.Length; i++)
+                {
+                    be.BreakBeam(i, true);
+                }
+            }
+
             // Delete the old block
             byEntity.World.BlockAccessor.SetBlock(0, blockSel.Position);
             byEntity.World.BlockAccessor.MarkBlockModified(blockSel.Position);
