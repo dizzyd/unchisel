@@ -57,21 +57,16 @@ internal class ItemUnchisel : Item
 
         if (byEntity.World.Side == EnumAppSide.Server)
         {
-            // Spawn items that were in the original block - note that we need to use the block's drops,
+            // Spawn items that were in the original block - note that we need to use the block's PickBlock,
             // not just an item stack of the block so that things like planks (which have multiple blocks with different
-            // orientations) will stack properly.
+            // orientations) will return the correct "default" properly.
             ItemStack microBlockStack = microBlock.OnPickBlock(byEntity.World, blockSel.Position);
             IntArrayAttribute materials = microBlockStack.Attributes["materials"] as IntArrayAttribute;
             foreach (int materialId in materials.value)
             {
                 Block material = api.World.GetBlock(materialId);
-                ItemStack[] items = material.GetDrops(byEntity.World, blockSel.Position, byPlayer);
-                if (items == null || items.Length == 0)
-                {
-                    // Fallback to just an item stack of the material
-                    items = [ new ItemStack(material, 1) ];
-                }
-                byEntity.World.SpawnItemEntity(items[0], blockSel.Position);
+                ItemStack itemToSpawn = material.OnPickBlock(api.World, blockSel.Position);
+                byEntity.World.SpawnItemEntity(itemToSpawn, blockSel.Position);
             }
 
             // Damage the unchisel, based on number of materials that will be returned
