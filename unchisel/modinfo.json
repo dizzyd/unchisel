@@ -6,6 +6,6 @@
         "DizzyD"
     ],
     "description": "Convert any chiseled block back into original block types",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "dependencies": {}
 }

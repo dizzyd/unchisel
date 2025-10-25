@@ -28,6 +28,9 @@ internal class ItemUnchisel : Item
             return;
         }
         
+        // Check for air block
+        if (blockSel?.Position == null) return;
+
         // Target block must be breakable by the player
         IPlayer byPlayer = (byEntity as EntityPlayer)?.Player;
         if (!byEntity.World.Claims.TryAccess(byPlayer, blockSel.Position, EnumBlockAccessFlags.BuildOrBreak))
