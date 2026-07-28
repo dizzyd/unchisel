@@ -7,5 +7,7 @@
     ],
     "description": "Convert any chiseled block back into original block types",
     "version": "1.2.0",
-    "dependencies": {}
+    "dependencies": {
+        "game": "1.22.0"
+    }
 }
